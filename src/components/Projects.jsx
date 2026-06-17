@@ -3,19 +3,43 @@ import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
 const projectData = [
   {
-    title: 'SecureDocs',
+    title: 'IntelliVibe — AI Hiring Platform',
     description:
-      'A secure web platform for sharing confidential documents. Architected a decoupled backend separating the Key Distribution Center from the Data Storage Server — preventing any single component from accessing both encrypted files and decryption keys. Implemented Identity-Based Encryption (IBE) and Digital Signatures in C using OpenSSL and WebAssembly for secure transmission and verifiable sender identity.',
-    tech: ['Node.js', 'Express.js', 'React.js', 'MongoDB', 'AES', 'PBKDF2', 'IBE', 'OpenSSL', 'WebAssembly', 'JWT'],
-    github: 'https://github.com/mohitv7891',
+      'Full-stack MERN app that automates the hiring pipeline with a real-time AI video interview system and an AI-powered resume screening engine.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Express', 'Google Gemini', 'Socket.IO'],
+    github: 'https://github.com/mohitv7891/IntelliVibe',
     live: null,
   },
   {
-    title: 'Secure Message Transmission Protocol using RSA & AES',
+    title: 'BasketIQ — WhatsApp Grocery Bot',
     description:
-      'Designed a secure communication protocol using RSA for key exchange and digital signatures, and AES-256 for symmetric encryption of large datasets. Implemented key generation, encryption/decryption, digital signatures, and signature verification using Crypto++ on the Unix/Linux command line.',
-    tech: ['Bash', 'Unix/Linux', 'OpenSSL', 'RSA', 'AES-256', 'Public-key Cryptography', 'Digital Signatures', 'Crypto++'],
-    github: 'https://github.com/mohitv7891',
+      'WhatsApp bot that concurrently scrapes Blinkit and Zepto to compare grocery prices and find the cheapest complete cart — send your list, get the best deal.',
+    tech: ['Java', 'Spring Boot', 'Playwright', 'OpenAI', 'PostgreSQL', 'Twilio'],
+    github: 'https://github.com/mohitv7891/BasketIQ-WhatsApp',
+    live: null,
+  },
+  {
+    title: 'Personal Finance Assistant',
+    description:
+      'Web app to track expenses and spending patterns with AI-powered receipt scanning (OCR), visual analytics, and JWT-secured accounts.',
+    tech: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Prisma', 'JWT', 'Mindee OCR'],
+    github: 'https://github.com/mohitv7891/Personal-Finance-Assistant',
+    live: 'https://finance-app-frontend-52wb.onrender.com',
+  },
+  {
+    title: 'SecureDocs',
+    description:
+      'Secure document-sharing platform with a decoupled Key Distribution Center and Data Storage Server. Uses Identity-Based Encryption (IBE) and Digital Signatures via OpenSSL and WebAssembly.',
+    tech: ['Node.js', 'Express.js', 'React.js', 'MongoDB', 'AES', 'IBE', 'OpenSSL', 'WebAssembly', 'JWT'],
+    github: 'https://github.com/mohitv7891/secureDocs',
+    live: null,
+  },
+  {
+    title: 'Secure Message Transmission (RSA & AES)',
+    description:
+      'Command-line secure communication protocol using RSA for key exchange and digital signatures, and AES-256 for symmetric encryption of large datasets, implemented with Crypto++.',
+    tech: ['Bash', 'Unix/Linux', 'OpenSSL', 'RSA', 'AES-256', 'Digital Signatures', 'Crypto++'],
+    github: 'https://github.com/mohitv7891/crypto--_assignment',
     live: null,
   },
 ];
