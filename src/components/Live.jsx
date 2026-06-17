@@ -34,7 +34,6 @@ const Live = () => {
   const [time, setTime] = useState(new Date());
   const [github, setGithub] = useState(null);
   const [leetcode, setLeetcode] = useState(null);
-  const [spotify, setSpotify] = useState(null);
 
   useEffect(() => {
     const id = setInterval(() => setTime(new Date()), 1000);
@@ -61,12 +60,6 @@ const Live = () => {
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    fetch('/api/spotify')
-      .then((r) => r.json())
-      .then((data) => { if (data?.isPlaying) setSpotify(data); })
-      .catch(() => {});
-  }, []);
 
   const clockDisplay = time.toLocaleTimeString('en-IN', {
     timeZone: 'Asia/Kolkata',
@@ -149,15 +142,25 @@ const Live = () => {
             />
           )}
 
-          <ActivityRow
-            label="listening"
-            primary={spotify?.isPlaying ? spotify.title : 'Not playing'}
-            secondary={spotify?.isPlaying ? spotify.artist : 'Spotify · connect to go live'}
-            href={spotify?.isPlaying ? spotify.url : 'https://open.spotify.com'}
-          />
         </div>
 
       </div>
+
+      {/* Spotify playlist embed */}
+      <div className="mt-10">
+        <p className="text-[10px] uppercase tracking-widest text-slate-600 mb-3">listening to</p>
+        <iframe
+          title="Spotify Playlist"
+          src="https://open.spotify.com/embed/playlist/4xU9lGukLUmIx8sqDQ7tUs?utm_source=generator&theme=0"
+          width="100%"
+          height="152"
+          frameBorder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+          className="rounded-xl"
+        />
+      </div>
+
     </section>
   );
 };
