@@ -34,7 +34,7 @@ const Header = () => {
       </div>
 
       {/* Greeting */}
-      <p className="text-teal-400 text-sm tracking-[0.3em] uppercase mb-3">Hello, World! I&apos;m</p>
+      <p className="text-teal-400 text-sm tracking-[0.2em] font-mono mb-3">&gt; whoami</p>
 
       {/* Name */}
       <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-slate-200 to-teal-300 mb-4">
