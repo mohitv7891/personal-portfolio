@@ -63,7 +63,7 @@ const Header = () => {
         <span className="text-slate-300"> &#123;</span>
         <br />
         <span className="pl-4 text-slate-500">currently : </span>
-        <span className="text-amber-300">&quot;shipping AI @ TripFactory 🚀&quot;</span>
+        <span className="text-amber-300">&quot;shipping AI @ TripFactory&quot;</span>
         <span className="text-slate-300">,</span>
         <br />
         <span className="pl-4 text-slate-500">vibe      : </span>
@@ -97,10 +97,12 @@ const Header = () => {
           </a>
         ))}
         <a
-          href="mailto:mohitvishwakarma7891@gmail.com"
+          href="https://mail.google.com/mail/?view=cm&to=mohitvishwakarma7891@gmail.com&su=Let's%20Collaborate!&body=Hi%20Mohit%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20collaborate%20with%20you.%0A%0AHere's%20what%20I%20have%20in%20mind%3A%0A%0A%5BYour%20message%20here%5D%0A%0ALooking%20forward%20to%20hearing%20from%20you!%0A%0ABest%20regards%2C%0A%5BYour%20Name%5D"
+          target="_blank"
+          rel="noopener noreferrer"
           className="ml-2 bg-teal-400 text-custom-dark text-xs font-bold px-5 py-2 rounded-full hover:bg-teal-300 transition-colors"
         >
-          Hire Me
+          Collaborate
         </a>
       </div>
 
