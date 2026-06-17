@@ -56,7 +56,7 @@ function App() {
   return (
     <>
       {/* Banner — scrolls with page */}
-      <div className="w-full text-center py-2.5 text-sm bg-orange-950/60 border-b border-orange-900/40 text-orange-200 tracking-widest select-none">
+      <div className="w-full text-center py-1.5 text-base bg-orange-950/60 border-b border-orange-900/40 text-orange-200 tracking-widest select-none">
         🚩 &nbsp; जय हनुमान &nbsp; 🚩
       </div>
       <Navbar />
