@@ -43,7 +43,12 @@ const Header = () => {
 
       {/* Role pills */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-        <span className="bg-teal-400/10 border border-teal-400/20 text-teal-300 text-xs px-3 py-1 rounded-full">#OpenToCollaborate</span>
+        <a
+            href="mailto:mohitvishwakarma7891@gmail.com?subject=Let's%20Collaborate!"
+            className="bg-teal-400/10 border border-teal-400/20 text-teal-300 text-xs px-3 py-1 rounded-full hover:bg-teal-400/20 hover:border-teal-400/50 transition-colors cursor-pointer"
+          >
+            #OpenToCollaborate
+          </a>
         <span className="bg-slate-800/60 border border-custom-border text-slate-400 text-xs px-3 py-1 rounded-full">Engineering @ TripFactory.com</span>
         <span className="bg-slate-800/60 border border-custom-border text-slate-400 text-xs px-3 py-1 rounded-full">M.Tech · IIITA</span>
       </div>
