@@ -59,7 +59,7 @@ const Live = () => {
   }, []);
 
   useEffect(() => {
-    fetch('https://alfa-leetcode-api.onrender.com/mohitv7891/submission?limit=1')
+    fetch('https://alfa-leetcode-api.onrender.com/mohitv7891_/submission?limit=1')
       .then((r) => r.json())
       .then((data) => {
         const latest = data?.submission?.[0];
