@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import now from '../data/now';
 import { FaExternalLinkAlt } from 'react-icons/fa';
+
+// ── Edit your reading/learning here (no code needed):
+// https://gist.github.com/mohitv7891/042550b5b0ee7534e699ae76773db385
+const GIST_URL = 'https://gist.githubusercontent.com/mohitv7891/042550b5b0ee7534e699ae76773db385/raw';
 
 const timeAgo = (ts) => {
   const s = Math.floor((Date.now() - new Date(ts)) / 1000);
@@ -32,6 +35,7 @@ const ActivityRow = ({ label, primary, secondary, href }) => (
 
 const Live = () => {
   const [time, setTime] = useState(new Date());
+  const [nowData, setNowData] = useState(null);
   const [spotify, setSpotify] = useState(null);
   const [github, setGithub] = useState(null);
   const [leetcode, setLeetcode] = useState(null);
@@ -39,6 +43,13 @@ const Live = () => {
   useEffect(() => {
     const id = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    fetch(`${GIST_URL}?t=${Date.now()}`)
+      .then((r) => r.json())
+      .then((data) => setNowData(data))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -121,15 +132,15 @@ const Live = () => {
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6">
           <ActivityRow
             label="reading"
-            primary={now.reading.title}
-            secondary={now.reading.author}
-            href={now.reading.url}
+            primary={nowData?.reading?.title ?? '…'}
+            secondary={nowData?.reading?.author}
+            href={nowData?.reading?.url}
           />
 
           <ActivityRow
             label="learning"
-            primary={now.learning.topic}
-            secondary={now.learning.resource}
+            primary={nowData?.learning?.topic ?? '…'}
+            secondary={nowData?.learning?.resource}
           />
 
           {github && (
