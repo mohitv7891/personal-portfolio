@@ -37,9 +37,11 @@ const Header = () => {
       <p className="text-teal-400 text-sm tracking-[0.2em] font-mono mb-3">&gt; whoami</p>
 
       {/* Name */}
-      <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-slate-200 to-teal-300 mb-4">
+      <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-slate-200 to-teal-300 mb-2">
         Mohit Vishwakarma
       </h1>
+
+      <p className="text-base mb-4 select-none">🚩 जय हनुमान 🚩</p>
 
       {/* Role pills */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
