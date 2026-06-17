@@ -1,36 +1,47 @@
 import React from 'react';
 
-const achievementsList = [
+const achievements = [
   {
-    title: 'GATE 2024 — 97.19 Percentile',
-    detail: 'Scored a GATE score of 558 among 1,23,967 candidates in the CS/IT exam.',
+    metric: '97.19%',
+    title: 'GATE 2024 Percentile',
+    detail: 'GATE score of 558 among 1,23,967 CS/IT candidates.',
+    accent: 'text-teal-400 border-teal-400/30 bg-teal-400/5',
   },
   {
-    title: 'LeetCode — Rating 1613',
-    detail: '600+ problems solved across data structures, algorithms, and system design topics.',
+    metric: '1613',
+    title: 'LeetCode Rating',
+    detail: '600+ problems solved across DSA and system design.',
+    accent: 'text-amber-400 border-amber-400/30 bg-amber-400/5',
   },
   {
-    title: 'CodeChef — 4-Star (Max Rating: 1817)',
-    detail: 'Earned a 4-star rating through consistent competitive programming performance.',
+    metric: '4★',
+    title: 'CodeChef Rating',
+    detail: 'Max rating of 1817 through competitive programming.',
+    accent: 'text-violet-400 border-violet-400/30 bg-violet-400/5',
   },
 ];
 
 const Achievements = () => {
   return (
-    <section className="py-10">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold mb-6">Achievements</h2>
-        <div className="flex flex-col gap-3">
-          {achievementsList.map((item, index) => (
-            <div key={index} className="bg-custom-light-dark p-4 rounded-lg flex items-start gap-4">
-              <span className="mt-1 w-2 h-2 rounded-full bg-teal-400 shrink-0" />
-              <div>
-                <p className="font-semibold text-white">{item.title}</p>
-                <p className="text-slate-400 text-sm mt-0.5">{item.detail}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section id="achievements" className="py-20 pb-32">
+      {/* Section heading */}
+      <div className="flex items-center gap-4 mb-10">
+        <span className="text-teal-400 text-sm font-mono shrink-0">06.</span>
+        <h2 className="text-xl font-bold text-slate-100 shrink-0">Achievements</h2>
+        <div className="flex-1 h-px bg-custom-border" />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        {achievements.map((item) => (
+          <div
+            key={item.title}
+            className={`rounded-xl border p-6 text-center hover:-translate-y-1 transition-all duration-300 ${item.accent}`}
+          >
+            <p className="text-4xl font-bold mb-1">{item.metric}</p>
+            <p className="text-slate-200 font-semibold text-sm mb-2">{item.title}</p>
+            <p className="text-slate-500 text-xs leading-relaxed">{item.detail}</p>
+          </div>
+        ))}
       </div>
     </section>
   );

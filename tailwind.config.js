@@ -46,8 +46,10 @@ export default {
         roboto: ['Roboto Mono', 'monospace'],
       },
       colors: {
-        'custom-dark': '#0F172A', // A dark slate blue
-        'custom-light-dark': '#1E293B', // A lighter slate blue for cards
+        'custom-dark': '#060D18',
+        'custom-light-dark': '#0C1628',
+        'custom-card-hover': '#101F36',
+        'custom-border': '#1A2D45',
       }
     },
   },

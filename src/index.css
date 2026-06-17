@@ -2,14 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-custom-dark text-slate-300 antialiased;
   font-family: 'Roboto Mono', monospace;
+  background-image: radial-gradient(rgba(45, 212, 191, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 h1, h2, h3 {
   @apply text-slate-100 font-bold;
 }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #060D18; }
+::-webkit-scrollbar-thumb { background: #1A2D45; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2DD4BF; }
 
 /* Add these styles at the end of your index.css */
 
