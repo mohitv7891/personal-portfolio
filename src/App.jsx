@@ -29,6 +29,7 @@ export default App;
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
+import Live from './components/Live';
 import About from './components/About';
 import Experience from './components/Experience';
 import Education from './components/Education';
@@ -61,6 +62,7 @@ function App() {
 
         {/* Content sections — constrained width */}
         <div className="max-w-4xl mx-auto px-6">
+          <Live />
           <About />
           <Experience />
           <Education />
