@@ -38,20 +38,14 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex flex-col">
-      {/* Top banner */}
-      <div className="w-full text-center py-1 text-xs bg-orange-950/60 border-b border-orange-900/40 text-orange-200 tracking-widest select-none">
-        🚩 जय हनुमान 🚩
-      </div>
-
-      {/* Navbar */}
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-custom-dark/80 backdrop-blur-lg border-b border-custom-border'
+          : 'bg-transparent'
+      }`}
+    >
       <div
-        className={`transition-all duration-300 ${
-          scrolled
-            ? 'bg-custom-dark/80 backdrop-blur-lg border-b border-custom-border'
-            : 'bg-transparent'
-        }`}
-      >
         <div className="max-w-5xl mx-auto px-6 flex items-center justify-between h-14">
           <a href="#" className="text-teal-400 font-bold tracking-widest text-sm">
             MV<span className="text-custom-border">.</span>
@@ -72,7 +66,6 @@ const Navbar = () => {
             ))}
           </nav>
         </div>
-      </div>
     </header>
   );
 };
