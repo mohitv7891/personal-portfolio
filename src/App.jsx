@@ -60,7 +60,7 @@ function App() {
         🚩 &nbsp; जय हनुमान &nbsp; 🚩
       </div>
       <Navbar />
-      <main className="min-h-screen pt-14">
+      <main className="min-h-screen">
         {/* Hero — full viewport, no side padding constraint */}
         <Header />
 
