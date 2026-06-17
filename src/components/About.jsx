@@ -1,4 +1,5 @@
 import React from 'react';
+import ReadMore from './ReadMore';
 
 const About = () => {
   return (
@@ -11,20 +12,22 @@ const About = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-10">
-        <p className="text-slate-400 leading-8 text-sm max-w-2xl">
-          M.Tech student in{' '}
-          <span className="text-teal-300">Network and Security</span> at IIITA, and SDE Intern at{' '}
-          <span className="text-teal-300">TripFactory.com</span>, where I build AI-powered hotel,
-          dining, and itinerary intelligence systems using Core Java, Playwright, and LLM APIs.
-          <br /><br />
-          I have a strong foundation in{' '}
-          <span className="text-teal-300">backend engineering</span>,{' '}
-          <span className="text-teal-300">cryptography</span> (AES, RSA, IBE, OpenSSL), and
-          full-stack development with React, Node.js, and Express. I ranked in the{' '}
-          <span className="text-teal-300">97.19 percentile</span> in GATE 2024 and am passionate
-          about solving complex problems at the intersection of security, systems, and intelligent
-          automation.
-        </p>
+        <ReadMore collapsedClass="max-h-[5.5rem]" fromColor="#060D18">
+          <p className="text-slate-400 leading-8 text-sm max-w-2xl">
+            M.Tech student in{' '}
+            <span className="text-teal-300">Network and Security</span> at IIITA, and SDE Intern at{' '}
+            <span className="text-teal-300">TripFactory.com</span>, where I build AI-powered hotel,
+            dining, and itinerary intelligence systems using Core Java, Playwright, and LLM APIs.
+            <br /><br />
+            I have a strong foundation in{' '}
+            <span className="text-teal-300">backend engineering</span>,{' '}
+            <span className="text-teal-300">cryptography</span> (AES, RSA, IBE, OpenSSL), and
+            full-stack development with React, Node.js, and Express. I ranked in the{' '}
+            <span className="text-teal-300">97.19 percentile</span> in GATE 2024 and am passionate
+            about solving complex problems at the intersection of security, systems, and intelligent
+            automation.
+          </p>
+        </ReadMore>
 
         {/* Quick stats */}
         <div className="grid grid-cols-3 md:flex md:flex-col gap-4 shrink-0">

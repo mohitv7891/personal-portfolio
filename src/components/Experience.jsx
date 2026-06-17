@@ -1,4 +1,5 @@
 import React from 'react';
+import ReadMore from './ReadMore';
 
 const experienceData = [
   {
@@ -48,14 +49,16 @@ const Experience = () => {
                 </div>
               </div>
 
-              <ul className="space-y-2 mb-4">
-                {job.bullets.map((b, j) => (
-                  <li key={j} className="flex gap-3 text-slate-400 text-xs leading-relaxed">
-                    <span className="text-teal-400 mt-0.5 shrink-0">▹</span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
+              <ReadMore collapsedClass="max-h-[5.5rem]" fromColor="#0C1628">
+                <ul className="space-y-2 mb-4">
+                  {job.bullets.map((b, j) => (
+                    <li key={j} className="flex gap-3 text-slate-400 text-xs leading-relaxed">
+                      <span className="text-teal-400 mt-0.5 shrink-0">▹</span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </ReadMore>
 
               <div className="flex flex-wrap gap-2 pt-3 border-t border-custom-border">
                 {job.tech.map((t, j) => (
