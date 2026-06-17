@@ -56,7 +56,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen">
+      <main className="min-h-screen pt-[84px]">
         {/* Hero — full viewport, no side padding constraint */}
         <Header />
 
