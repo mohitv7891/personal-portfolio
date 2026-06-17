@@ -1,32 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import now from '../data/now';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
-const timeAgo = (timestamp) => {
-  const seconds = Math.floor((Date.now() - new Date(timestamp)) / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-  return `${Math.floor(seconds / 86400)}d ago`;
+const timeAgo = (ts) => {
+  const s = Math.floor((Date.now() - new Date(ts)) / 1000);
+  if (s < 60) return `${s}s ago`;
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+  return `${Math.floor(s / 86400)}d ago`;
 };
 
-const Row = ({ label, value, href, muted = false }) => {
-  const content = (
-    <div className={`flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-4 py-3 border-b border-custom-border last:border-0 group/row ${href ? 'cursor-pointer' : ''}`}>
-      <span className="text-[11px] uppercase tracking-widest text-slate-600 shrink-0 w-24">{label}</span>
-      <span className={`text-sm leading-snug transition-colors ${muted ? 'text-slate-500' : 'text-slate-300 group-hover/row:text-teal-300'}`}>
-        {value}
-      </span>
-    </div>
-  );
-
-  return href ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="block">
-      {content}
-    </a>
-  ) : (
-    content
-  );
-};
+const ActivityRow = ({ label, primary, secondary, href }) => (
+  <div className="group flex flex-col gap-0.5">
+    <span className="text-[10px] uppercase tracking-widest text-slate-600">{label}</span>
+    {href ? (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-1.5 text-slate-300 text-sm hover:text-teal-300 transition-colors"
+      >
+        {primary}
+        <FaExternalLinkAlt size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+      </a>
+    ) : (
+      <p className="text-slate-300 text-sm">{primary}</p>
+    )}
+    {secondary && <p className="text-slate-600 text-xs">{secondary}</p>}
+  </div>
+);
 
 const Live = () => {
   const [time, setTime] = useState(new Date());
@@ -34,13 +36,11 @@ const Live = () => {
   const [leetcode, setLeetcode] = useState(null);
   const [spotify, setSpotify] = useState(null);
 
-  // Clock
   useEffect(() => {
     const id = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  // GitHub
   useEffect(() => {
     fetch('https://api.github.com/users/mohitv7891/events?per_page=30')
       .then((r) => r.json())
@@ -51,7 +51,6 @@ const Live = () => {
       .catch(() => {});
   }, []);
 
-  // LeetCode
   useEffect(() => {
     fetch('https://alfa-leetcode-api.onrender.com/mohitv7891/submission?limit=1')
       .then((r) => r.json())
@@ -62,7 +61,6 @@ const Live = () => {
       .catch(() => {});
   }, []);
 
-  // Spotify
   useEffect(() => {
     fetch('/api/spotify')
       .then((r) => r.json())
@@ -70,20 +68,26 @@ const Live = () => {
       .catch(() => {});
   }, []);
 
-  const istTime = time.toLocaleTimeString('en-IN', {
+  const clockDisplay = time.toLocaleTimeString('en-IN', {
     timeZone: 'Asia/Kolkata',
     hour: '2-digit',
     minute: '2-digit',
-    hour12: true,
+    hour12: false,
+  });
+
+  const dateDisplay = time.toLocaleDateString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
   });
 
   const githubRepo = github?.repo?.name?.replace('mohitv7891/', '');
-  const githubCommit = github?.payload?.commits?.at(-1)?.message?.split('\n')[0];
 
   return (
     <section id="now" className="py-20">
       {/* Section heading */}
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center gap-4 mb-12">
         <span className="text-teal-400 text-sm font-mono shrink-0">~</span>
         <h2 className="text-xl font-bold text-slate-100 shrink-0">Now</h2>
         <div className="flex-1 h-px bg-custom-border" />
@@ -93,62 +97,67 @@ const Live = () => {
         </span>
       </div>
 
-      {/* Single focused card */}
-      <div className="bg-custom-light-dark border border-custom-border rounded-xl px-6 py-2">
+      {/* Two-column typographic layout */}
+      <div className="flex flex-col md:flex-row gap-10 md:gap-0">
 
-        {/* Clock row — always visible, special treatment */}
-        <div className="flex items-center justify-between py-3 border-b border-custom-border">
-          <div className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-4">
-            <span className="text-[11px] uppercase tracking-widest text-slate-600 w-24 shrink-0">local time</span>
-            <span className="text-slate-100 text-sm font-semibold tabular-nums">
-              {istTime} <span className="text-slate-500 font-normal text-xs">IST · Bengaluru</span>
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-green-400 shrink-0">
+        {/* Left — Clock */}
+        <div className="md:w-52 shrink-0 flex flex-col justify-center">
+          <p className="text-7xl font-bold text-slate-100 tabular-nums leading-none tracking-tighter">
+            {clockDisplay}
+          </p>
+          <p className="text-slate-500 text-xs mt-3 tracking-wide">{dateDisplay} · IST</p>
+          <div className="flex items-center gap-1.5 mt-4 text-xs text-green-400">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            online
+            online · Bengaluru
           </div>
         </div>
 
-        {/* Reading */}
-        <Row
-          label="reading"
-          value={`${now.reading.title} — ${now.reading.author}`}
-          href={now.reading.url}
-        />
+        {/* Divider */}
+        <div className="hidden md:block w-px bg-custom-border mx-12 self-stretch" />
+        <div className="block md:hidden h-px bg-custom-border" />
 
-        {/* Learning */}
-        <Row
-          label="learning"
-          value={now.learning.topic}
-        />
-
-        {/* GitHub */}
-        {github && (
-          <Row
-            label="github"
-            value={`${githubRepo}${githubCommit ? ` · "${githubCommit}"` : ''} · ${timeAgo(github.created_at)}`}
-            href={`https://github.com/mohitv7891/${githubRepo}`}
+        {/* Right — Activities */}
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <ActivityRow
+            label="reading"
+            primary={now.reading.title}
+            secondary={now.reading.author}
+            href={now.reading.url}
           />
-        )}
 
-        {/* LeetCode */}
-        {leetcode && (
-          <Row
-            label="leetcode"
-            value={`solved "${leetcode.title}" · ${timeAgo(new Date(Number(leetcode.timestamp) * 1000))}`}
-            href={`https://leetcode.com/problems/${leetcode.titleSlug}/`}
+          <ActivityRow
+            label="learning"
+            primary={now.learning.topic}
+            secondary={now.learning.resource}
           />
-        )}
 
-        {/* Spotify — only shown when actually playing */}
-        {spotify?.isPlaying && (
-          <Row
-            label="listening"
-            value={`${spotify.title} — ${spotify.artist}`}
-            href={spotify.url}
-          />
-        )}
+          {github && (
+            <ActivityRow
+              label="last pushed"
+              primary={githubRepo}
+              secondary={timeAgo(github.created_at)}
+              href={`https://github.com/mohitv7891/${githubRepo}`}
+            />
+          )}
+
+          {leetcode && (
+            <ActivityRow
+              label="last solved"
+              primary={leetcode.title}
+              secondary={timeAgo(new Date(Number(leetcode.timestamp) * 1000))}
+              href={`https://leetcode.com/problems/${leetcode.titleSlug}/`}
+            />
+          )}
+
+          {spotify?.isPlaying && (
+            <ActivityRow
+              label="listening"
+              primary={spotify.title}
+              secondary={spotify.artist}
+              href={spotify.url}
+            />
+          )}
+        </div>
 
       </div>
     </section>
