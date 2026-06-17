@@ -13,14 +13,6 @@ const socialLinks = [
   },
 ];
 
-const navLinks = [
-  { label: 'Now', href: '#now' },
-  { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Achievements', href: '#achievements' },
-];
-
 const Footer = () => {
   const [keySymbol, setKeySymbol] = useState('⌘');
 
@@ -55,25 +47,6 @@ const Footer = () => {
               <p className="text-slate-600 text-xs mt-0.5">
                 SDE Intern @ TripFactory.com · Bengaluru
               </p>
-            </div>
-
-            {/* Quick nav */}
-            <div>
-              <p className="text-slate-500 text-[10px] font-bold tracking-widest uppercase mb-3">
-                Navigate
-              </p>
-              <ul className="flex flex-col gap-2">
-                {navLinks.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      className="text-slate-400 text-xs hover:text-teal-400 transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </div>
 
             {/* Contact */}
