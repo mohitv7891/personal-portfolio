@@ -1,8 +1,18 @@
 import React from 'react';
 
 const skillsList = [
-  'JavaScript', 'C/C++', 'React.js', 'Node.js', 'Express.js', 'MongoDB', 'REST APIs', 
-  'HTML/CSS', 'MySql', 'Git/Github', 'Docker', 'DataStructures/Algorithms'
+  // Languages
+  'C++', 'C', 'Java', 'JavaScript', 'Node.js',
+  // Frameworks / Libraries
+  'React.js', 'Next.js', 'Express.js',
+  // Databases
+  'MySQL', 'MongoDB', 'PostgreSQL',
+  // Tools & DevOps
+  'Git', 'Linux', 'Postman', 'Swagger', 'Prisma', 'JWT',
+  // Cryptography & Security
+  'OpenSSL', 'Crypto++', 'AES', 'RSA', 'IBE',
+  // Core Concepts
+  'Data Structures & Algorithms', 'DBMS', 'Operating Systems', 'OOP', 'Computer Networks', 'Cryptography',
 ];
 
 const Skills = () => {

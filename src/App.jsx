@@ -33,6 +33,7 @@ import Experience from './components/Experience';
 import Education from './components/Education';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
+import Achievements from './components/Achievements';
 import CommandMenu from './components/CommandMenu'; // Import CommandMenu
 import Footer from './components/Footer'; // Import Footer
 
@@ -62,6 +63,7 @@ function App() {
         <Education />
         <Skills />
         <Projects />
+        <Achievements />
       </div>
       
       {/* Render the command menu and footer */}

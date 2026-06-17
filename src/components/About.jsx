@@ -6,7 +6,7 @@ const About = () => {
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold mb-4">About</h2>
         <p className="text-slate-400 max-w-4xl">
-          Passionate Software Developer with a strong foundation in full-stack development. Proven track record in designing and implementing scalable, resilient, and user-centric applications. Adept at leveraging modern technologies to solve complex problems and deliver impactful solutions.
+          M.Tech student in Network and Security at IIITA (GATE 2024 — 97.19 percentile) and SDE Intern at TripFactory.com, where I build AI-powered hotel, dining, and itinerary intelligence systems using Java, Playwright, and LLM APIs. I have a strong foundation in backend engineering, cryptography (AES, RSA, IBE, OpenSSL), and full-stack development with React, Node.js, and Express. Passionate about solving complex problems at the intersection of security, systems, and intelligent automation.
         </p>
       </div>
     </section>

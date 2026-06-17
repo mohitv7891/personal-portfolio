@@ -1,17 +1,23 @@
 import React from 'react';
+import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
 const projectData = [
   {
-    title: 'IntelliVibe - AI-Powered Hiring Platform',
-    description: 'A full-stack MERN application to automate the hiring pipeline, featuring a real-time, conversational AI video interview system and an AI-powered resume screening engine.',
-    tech: ['React', 'Node.js', 'MongoDB', 'Express', 'Google Gemini', 'Socket.IO'],
+    title: 'SecureDocs',
+    description:
+      'A secure web platform for sharing confidential documents. Architected a decoupled backend separating the Key Distribution Center from the Data Storage Server — preventing any single component from accessing both encrypted files and decryption keys. Implemented Identity-Based Encryption (IBE) and Digital Signatures in C using OpenSSL and WebAssembly for secure transmission and verifiable sender identity.',
+    tech: ['Node.js', 'Express.js', 'React.js', 'MongoDB', 'AES', 'PBKDF2', 'IBE', 'OpenSSL', 'WebAssembly', 'JWT'],
+    github: 'https://github.com/mohitv7891',
+    live: null,
   },
   {
-    title: 'SecureDocs',
-    description: 'A full-stack secure document sharing platform using Identity-Based Encryption (IBE) with a core crypto-engine in C++ compiled to WebAssembly for 20x faster client-side encryption.',
-    tech: ['React', 'Node.js', 'C++', 'WebAssembly', 'IBE'],
+    title: 'Secure Message Transmission Protocol using RSA & AES',
+    description:
+      'Designed a secure communication protocol using RSA for key exchange and digital signatures, and AES-256 for symmetric encryption of large datasets. Implemented key generation, encryption/decryption, digital signatures, and signature verification using Crypto++ on the Unix/Linux command line.',
+    tech: ['Bash', 'Unix/Linux', 'OpenSSL', 'RSA', 'AES-256', 'Public-key Cryptography', 'Digital Signatures', 'Crypto++'],
+    github: 'https://github.com/mohitv7891',
+    live: null,
   },
-  // You can add more projects here
 ];
 
 const Projects = () => {
@@ -22,11 +28,34 @@ const Projects = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projectData.map((project, index) => (
             <div key={index} className="bg-custom-light-dark p-6 rounded-lg shadow-lg flex flex-col">
-              <h3 className="text-xl font-semibold mb-2 flex items-center">
-                {project.title}
-                <span className="inline-block w-2 h-2 bg-green-500 rounded-full ml-2"></span>
-              </h3>
-              <p className="text-slate-400 flex-grow">{project.description}</p>
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <h3 className="text-xl font-semibold leading-snug">{project.title}</h3>
+                <div className="flex items-center gap-2 shrink-0 mt-1">
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-400 hover:text-white transition-colors"
+                      aria-label="GitHub"
+                    >
+                      <FaGithub size={18} />
+                    </a>
+                  )}
+                  {project.live && (
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-400 hover:text-white transition-colors"
+                      aria-label="Live Demo"
+                    >
+                      <FaExternalLinkAlt size={15} />
+                    </a>
+                  )}
+                </div>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed flex-grow">{project.description}</p>
               <div className="flex flex-wrap gap-2 mt-4">
                 {project.tech.map((tech, i) => (
                   <span key={i} className="bg-slate-200 text-slate-900 px-3 py-1 text-xs font-semibold rounded-md">

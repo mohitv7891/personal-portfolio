@@ -19,17 +19,17 @@ const Header = () => {
       <div className="container mx-auto flex flex-col md:flex-row items-start justify-between">
         {/* Left Side */}
         <div className="md:w-3/5">
-          <h1 className="text-5xl font-bold">Mohit Viswkarma</h1>
+          <h1 className="text-5xl font-bold">Mohit Vishwakarma</h1>
           <div className="flex items-center gap-4 my-4">
             <span className="bg-teal-400/10 text-teal-300 text-xs font-medium px-3 py-1 rounded-full">#OpenToWork</span>
             <button className="bg-white text-black font-semibold px-4 py-1 rounded-md">Hire Me!</button>
           </div>
           <p className="text-lg text-slate-400 max-w-xl">
-            Software Engineer Intern with hands-on experience in full-stack development, focused on building scalable and user-centric applications.
+            SDE Intern at TripFactory.com building AI-powered hotel, dining & itinerary intelligence platforms. M.Tech in Network &amp; Security (IIITA) with a strong background in backend engineering, cryptography, and full-stack development.
           </p>
           <div className="flex items-center gap-2 my-4 text-slate-400">
             <IoLocationOutline />
-            <span>Prayagraj UP, India</span>
+            <span>Bengaluru, Karnataka, India</span>
           </div>
           <div className="flex items-center gap-3 mt-6">
             {socialLinks.map((link, index) => (
@@ -48,7 +48,7 @@ const Header = () => {
         <div className="mt-8 md:mt-0 md:w-2/5 flex justify-center md:justify-end">
             <img 
                 src={profilePic} 
-                alt="Mohit Viswkarma" 
+                alt="Mohit Vishwakarma" 
                 className="w-48 h-48 rounded-xl object-cover grayscale"
             />
         </div>
