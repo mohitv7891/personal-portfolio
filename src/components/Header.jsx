@@ -62,12 +62,16 @@ const Header = () => {
         <span className="text-teal-400">=</span>
         <span className="text-slate-300"> &#123;</span>
         <br />
-        <span className="pl-4 text-slate-500">role: </span>
-        <span className="text-amber-300">&quot;Full-Stack &amp; Security Engineer&quot;</span>
+        <span className="pl-4 text-slate-500">currently : </span>
+        <span className="text-amber-300">&quot;shipping AI @ TripFactory 🚀&quot;</span>
         <span className="text-slate-300">,</span>
         <br />
-        <span className="pl-4 text-slate-500">location: </span>
-        <span className="text-amber-300">&quot;Bengaluru, India&quot;</span>
+        <span className="pl-4 text-slate-500">vibe      : </span>
+        <span className="text-amber-300">&quot;build · break · secure · repeat&quot;</span>
+        <span className="text-slate-300">,</span>
+        <br />
+        <span className="pl-4 text-slate-500">open_to   : </span>
+        <span className="text-amber-300">&quot;collab, coffee &amp; cool ideas ☕&quot;</span>
         <br />
         <span className="text-slate-300">&#125;</span>
       </div>
