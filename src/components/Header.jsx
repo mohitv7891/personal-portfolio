@@ -44,7 +44,7 @@ const Header = () => {
       {/* Role pills */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
         <a
-            href="https://mail.google.com/mail/?view=cm&to=mohitvishwakarma7891@gmail.com&su=Let's%20Collaborate!"
+            href="https://mail.google.com/mail/?view=cm&to=mohitvishwakarma7891@gmail.com&su=Let's%20Collaborate!&body=Hi%20Mohit%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20collaborate%20with%20you.%0A%0AHere's%20what%20I%20have%20in%20mind%3A%0A%0A%5BYour%20message%20here%5D%0A%0ALooking%20forward%20to%20hearing%20from%20you!%0A%0ABest%20regards%2C%0A%5BYour%20Name%5D"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-teal-400/10 border border-teal-400/20 text-teal-300 text-xs px-3 py-1 rounded-full hover:bg-teal-400/20 hover:border-teal-400/50 transition-colors cursor-pointer"
