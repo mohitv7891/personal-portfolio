@@ -114,7 +114,7 @@ const Live = () => {
 
         {/* Left — Clock */}
         <div className="md:w-52 shrink-0 flex flex-col justify-center">
-          <p className="text-7xl font-bold text-slate-100 tabular-nums leading-none tracking-tighter">
+          <p className="text-5xl md:text-7xl font-bold text-slate-100 tabular-nums leading-none tracking-tighter">
             {clockDisplay}
           </p>
           <p className="text-slate-500 text-xs mt-3 tracking-wide">{dateDisplay} · IST</p>

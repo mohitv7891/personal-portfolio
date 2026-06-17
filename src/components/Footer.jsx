@@ -13,8 +13,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="fixed bottom-0 left-0 
-    w-full flex items-center justify-center p-4 bg-custom-dark">
+    <footer className="fixed bottom-0 left-0 w-full hidden md:flex items-center justify-center p-4 bg-custom-dark">
       <div className="text-xs text-slate-500">
         Press{' '}
         <kbd className="px-2 py-1.5 text-xs font-semibold text-slate-400 bg-slate-800 border border-slate-700 rounded-lg">

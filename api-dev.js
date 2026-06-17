@@ -55,7 +55,24 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    const data = await response.json();
+    const text = await response.text();
+    console.log(`[Spotify] status=${response.status} body=${text.slice(0, 300)}`);
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      res.writeHead(200);
+      res.end(JSON.stringify({ isPlaying: false, error: `Spotify returned: ${text.slice(0, 100)}` }));
+      return;
+    }
+
+    if (data.error) {
+      res.writeHead(200);
+      res.end(JSON.stringify({ isPlaying: false, error: `${data.error.status}: ${data.error.message}` }));
+      return;
+    }
+
     res.writeHead(200);
     res.end(JSON.stringify({
       isPlaying: data.is_playing,

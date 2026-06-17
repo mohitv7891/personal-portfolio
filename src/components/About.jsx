@@ -27,7 +27,7 @@ const About = () => {
         </p>
 
         {/* Quick stats */}
-        <div className="flex md:flex-col gap-4 shrink-0">
+        <div className="grid grid-cols-3 md:flex md:flex-col gap-4 shrink-0">
           {[
             { value: '600+', label: 'DSA Problems' },
             { value: '97.19%', label: 'GATE 2024' },
@@ -35,7 +35,7 @@ const About = () => {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="bg-custom-light-dark border border-custom-border rounded-lg px-5 py-4 text-center"
+              className="bg-custom-light-dark border border-custom-border rounded-lg px-3 py-4 text-center"
             >
               <p className="text-teal-400 text-2xl font-bold">{stat.value}</p>
               <p className="text-slate-500 text-xs mt-1">{stat.label}</p>

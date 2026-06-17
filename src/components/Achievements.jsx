@@ -23,7 +23,7 @@ const achievements = [
 
 const Achievements = () => {
   return (
-    <section id="achievements" className="py-20 pb-32">
+    <section id="achievements" className="py-20 md:pb-32">
       {/* Section heading */}
       <div className="flex items-center gap-4 mb-10">
         <span className="text-teal-400 text-sm font-mono shrink-0">06.</span>
