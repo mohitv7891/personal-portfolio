@@ -9,6 +9,12 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-  }});
+  },
+  server: {
+    proxy: {
+      '/api/spotify': 'http://localhost:3001',
+    },
+  },
+});
 
 
