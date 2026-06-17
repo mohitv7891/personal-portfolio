@@ -44,7 +44,7 @@ const Header = () => {
       {/* Role pills */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
         <span className="bg-teal-400/10 border border-teal-400/20 text-teal-300 text-xs px-3 py-1 rounded-full">#OpenToCollaborate</span>
-        <span className="bg-slate-800/60 border border-custom-border text-slate-400 text-xs px-3 py-1 rounded-full">SDE Intern @ TripFactory</span>
+        <span className="bg-slate-800/60 border border-custom-border text-slate-400 text-xs px-3 py-1 rounded-full">Engineering @ TripFactory.com</span>
         <span className="bg-slate-800/60 border border-custom-border text-slate-400 text-xs px-3 py-1 rounded-full">M.Tech · IIITA</span>
       </div>
 
