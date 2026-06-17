@@ -149,14 +149,12 @@ const Live = () => {
             />
           )}
 
-          {spotify?.isPlaying && (
-            <ActivityRow
-              label="listening"
-              primary={spotify.title}
-              secondary={spotify.artist}
-              href={spotify.url}
-            />
-          )}
+          <ActivityRow
+            label="listening"
+            primary={spotify?.isPlaying ? spotify.title : 'Not playing'}
+            secondary={spotify?.isPlaying ? spotify.artist : 'Spotify · connect to go live'}
+            href={spotify?.isPlaying ? spotify.url : 'https://open.spotify.com'}
+          />
         </div>
 
       </div>
