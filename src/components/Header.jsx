@@ -41,8 +41,6 @@ const Header = () => {
         Mohit Vishwakarma
       </h1>
 
-      <p className="text-base mb-4 select-none">🚩 जय हनुमान 🚩</p>
-
       {/* Role pills */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
         <a

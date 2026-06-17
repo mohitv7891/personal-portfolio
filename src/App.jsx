@@ -55,6 +55,10 @@ function App() {
 
   return (
     <>
+      {/* Top banner */}
+      <div className="w-full text-center py-1.5 text-sm bg-custom-light-dark border-b border-custom-border tracking-wide select-none">
+        🚩 जय हनुमान 🚩
+      </div>
       <Navbar />
       <main className="min-h-screen">
         {/* Hero — full viewport, no side padding constraint */}
