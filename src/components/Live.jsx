@@ -8,7 +8,7 @@ const GIST_URL = 'https://gist.githubusercontent.com/mohitv7891/042550b5b0ee7534
 // ── Heartbeat Gist — fill in after creating the status.json gist:
 // https://gist.github.com/mohitv7891/<GIST_ID>/raw/status.json
 // Leave empty string to always show offline until configured.
-const HEARTBEAT_GIST_URL = '';
+const HEARTBEAT_GIST_URL = 'https://gist.githubusercontent.com/mohitv7891/a6964334ecdffc19dc8adbf0b13cfaa0/raw/status.json';
 
 const timeAgo = (ts) => {
   const s = Math.floor((Date.now() - new Date(ts)) / 1000);
