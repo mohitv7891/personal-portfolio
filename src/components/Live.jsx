@@ -5,6 +5,11 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 // https://gist.github.com/mohitv7891/042550b5b0ee7534e699ae76773db385
 const GIST_URL = 'https://gist.githubusercontent.com/mohitv7891/042550b5b0ee7534e699ae76773db385/raw';
 
+// ── Heartbeat Gist — fill in after creating the status.json gist:
+// https://gist.github.com/mohitv7891/<GIST_ID>/raw/status.json
+// Leave empty string to always show offline until configured.
+const HEARTBEAT_GIST_URL = '';
+
 const timeAgo = (ts) => {
   const s = Math.floor((Date.now() - new Date(ts)) / 1000);
   if (s < 60) return `${s}s ago`;
@@ -39,6 +44,7 @@ const Live = () => {
   const [spotify, setSpotify] = useState(null);
   const [github, setGithub] = useState(null);
   const [leetcode, setLeetcode] = useState(null);
+  const [isOnline, setIsOnline] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => setTime(new Date()), 1000);
@@ -72,6 +78,23 @@ const Live = () => {
         if (push) setGithub(push);
       })
       .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!HEARTBEAT_GIST_URL) return;
+    const check = () => {
+      fetch(`${HEARTBEAT_GIST_URL}?t=${Date.now()}`)
+        .then((r) => r.json())
+        .then((data) => {
+          const lastSeen = new Date(data.lastSeen);
+          const minutesAgo = (Date.now() - lastSeen) / 60_000;
+          setIsOnline(minutesAgo < 10);
+        })
+        .catch(() => setIsOnline(false));
+    };
+    check();
+    const id = setInterval(check, 2 * 60_000); // re-check every 2 min
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -123,9 +146,9 @@ const Live = () => {
             {clockDisplay}
           </p>
           <p className="text-slate-500 text-xs mt-3 tracking-wide">{dateDisplay} · IST</p>
-          <div className="flex items-center gap-1.5 mt-4 text-xs text-green-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            online · Bengaluru
+          <div className={`flex items-center gap-1.5 mt-4 text-xs ${isOnline ? 'text-green-400' : 'text-slate-600'}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-slate-600'}`} />
+            {isOnline ? 'online · Bengaluru' : 'offline'}
           </div>
         </div>
 
