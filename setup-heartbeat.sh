@@ -14,7 +14,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LIVE_JSX="$SCRIPT_DIR/src/components/Live.jsx"
 HEARTBEAT_SH="$SCRIPT_DIR/heartbeat.sh"
 PID_FILE="/tmp/portfolio-heartbeat.pid"
-STATE_FILE="/tmp/portfolio-heartbeat.state"
+
+# ── Permanent Gist ID (never wiped by stop script) ───────────────
+FIXED_GIST_ID="a6964334ecdffc19dc8adbf0b13cfaa0"
 
 header() { echo -e "\n${TEAL}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"; }
 ok()     { echo -e "  ${GREEN}✓${NC} $1"; }
@@ -26,7 +28,7 @@ echo -e "  ${TEAL}Portfolio Heartbeat — Auto Setup${NC}"
 header
 
 # ── STEP 1: GitHub PAT ───────────────────────────────────────────
-echo -e "\n${YELLOW}[1/5]${NC} GitHub Personal Access Token"
+echo -e "\n${YELLOW}[1/4]${NC} GitHub Personal Access Token"
 info "Open → https://github.com/settings/tokens/new"
 info "Check only the 'gist' scope, then generate & paste below."
 echo -ne "\n  PAT (hidden): "
@@ -35,86 +37,58 @@ echo ""
 
 [ -z "$GITHUB_PAT" ] && fail "No PAT provided."
 
-# Verify token works
 HTTP=$(curl -s -o /dev/null -w "%{http_code}" \
   -H "Authorization: token $GITHUB_PAT" \
   https://api.github.com/user)
 [ "$HTTP" != "200" ] && fail "PAT invalid or expired (HTTP $HTTP)."
 ok "PAT verified"
 
-# ── STEP 2: Create secret Gist ───────────────────────────────────
-echo -e "\n${YELLOW}[2/5]${NC} Creating secret GitHub Gist..."
+# ── STEP 2: Ping existing Gist with fresh timestamp ──────────────
+echo -e "\n${YELLOW}[2/4]${NC} Updating heartbeat Gist (ID: ${FIXED_GIST_ID})..."
 
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-# Use Python to build valid JSON (avoids shell escaping pitfalls)
-GIST_BODY=$(python3 - <<EOF
+PATCH_BODY=$(python3 - <<EOF
 import json
-payload = {
-    "description": "Portfolio heartbeat",
-    "public": False,
-    "files": {
-        "status.json": {
-            "content": json.dumps({"lastSeen": "$TIMESTAMP"})
-        }
-    }
-}
+payload = {"files": {"status.json": {"content": json.dumps({"lastSeen": "$TIMESTAMP"})}}}
 print(json.dumps(payload))
 EOF
 )
 
-GIST_RESP=$(curl -s -X POST \
+HTTP=$(curl -s -o /dev/null -w "%{http_code}" \
+  -X PATCH \
   -H "Authorization: token $GITHUB_PAT" \
   -H "Accept: application/vnd.github.v3+json" \
   -H "Content-Type: application/json" \
-  https://api.github.com/gists \
-  -d "$GIST_BODY")
+  "https://api.github.com/gists/${FIXED_GIST_ID}" \
+  -d "$PATCH_BODY")
 
-GIST_ID=$(echo "$GIST_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id',''))" 2>/dev/null)
-[ -z "$GIST_ID" ] && fail "Gist creation failed. Response: $GIST_RESP"
-
-GIST_URL="https://gist.githubusercontent.com/mohitv7891/${GIST_ID}/raw/status.json"
-ok "Gist created → https://gist.github.com/mohitv7891/$GIST_ID"
+[ "$HTTP" = "200" ] && ok "Gist pinged (lastSeen: $TIMESTAMP)" \
+  || fail "Gist ping failed (HTTP $HTTP). Check PAT has 'gist' scope."
 
 # ── STEP 3: Patch heartbeat.sh ───────────────────────────────────
-echo -e "\n${YELLOW}[3/5]${NC} Configuring heartbeat.sh..."
+echo -e "\n${YELLOW}[3/4]${NC} Configuring heartbeat.sh..."
 
-# Save originals for stop-script to restore
-ORIG_PAT_LINE='GITHUB_PAT="your_github_personal_access_token_here"'
-ORIG_ID_LINE='GIST_ID="your_gist_id_here"'
+sed -i '' "s|^GITHUB_PAT=.*|GITHUB_PAT=\"${GITHUB_PAT}\"|" "$HEARTBEAT_SH"
+sed -i '' "s|^GIST_ID=.*|GIST_ID=\"${FIXED_GIST_ID}\"|"   "$HEARTBEAT_SH"
+ok "heartbeat.sh configured (PAT + Gist ID set)"
 
-# Only patch if still at default values
-if grep -q "your_github_personal_access_token_here" "$HEARTBEAT_SH"; then
-  sed -i '' "s|your_github_personal_access_token_here|${GITHUB_PAT}|g" "$HEARTBEAT_SH"
-  sed -i '' "s|your_gist_id_here|${GIST_ID}|g" "$HEARTBEAT_SH"
-  echo "$GIST_ID" > "$STATE_FILE"   # remember gist id for stop script
-  ok "heartbeat.sh patched"
+# Ensure Live.jsx has the correct Gist URL
+GIST_URL="https://gist.githubusercontent.com/mohitv7891/${FIXED_GIST_ID}/raw/status.json"
+if ! grep -q "$FIXED_GIST_ID" "$LIVE_JSX"; then
+  sed -i '' "s|const HEARTBEAT_GIST_URL = '.*';|const HEARTBEAT_GIST_URL = '${GIST_URL}';|g" "$LIVE_JSX"
+  cd "$SCRIPT_DIR"
+  git add src/components/Live.jsx
+  git commit -m "chore: set heartbeat Gist URL in Live.jsx" --quiet || true
+  git push origin ui-redesign --quiet
+  ok "Live.jsx updated and pushed"
+  cd - > /dev/null
 else
-  ok "heartbeat.sh already configured"
+  ok "Live.jsx already has correct Gist URL (no push needed)"
 fi
 
-# ── STEP 4: Patch Live.jsx ───────────────────────────────────────
-echo -e "\n${YELLOW}[4/5]${NC} Updating Live.jsx with Gist URL..."
+# ── STEP 4: Start heartbeat ──────────────────────────────────────
+echo -e "\n${YELLOW}[4/4]${NC} Starting heartbeat (background)..."
 
-if grep -q "HEARTBEAT_GIST_URL = '';" "$LIVE_JSX"; then
-  sed -i '' "s|const HEARTBEAT_GIST_URL = '';|const HEARTBEAT_GIST_URL = '${GIST_URL}';|g" "$LIVE_JSX"
-  ok "Live.jsx updated"
-else
-  ok "Live.jsx already has a Gist URL"
-fi
-
-# Commit + push so Vercel picks it up
-cd "$SCRIPT_DIR"
-git add src/components/Live.jsx heartbeat.sh
-git commit -m "chore: activate heartbeat online status" --quiet || true
-git push origin ui-redesign --quiet
-ok "Pushed to ui-redesign (Vercel will redeploy)"
-cd - > /dev/null
-
-# ── STEP 5: Start heartbeat in background ────────────────────────
-echo -e "\n${YELLOW}[5/5]${NC} Starting heartbeat (background)..."
-
-# Kill any previous instance
 if [ -f "$PID_FILE" ]; then
   OLD_PID=$(cat "$PID_FILE")
   kill "$OLD_PID" 2>/dev/null || true
@@ -128,7 +102,7 @@ info "Logs: tail -f /tmp/portfolio-heartbeat.log"
 info "Stop: bash stop-heartbeat.sh"
 
 header
-echo -e "  ${GREEN}All done! Your status shows 'online' on the portfolio.${NC}"
-echo -e "  ${GREEN}It will flip to 'offline' 10 min after you run stop-heartbeat.sh.${NC}"
+echo -e "  ${GREEN}All done! Portfolio shows 'online' now.${NC}"
+echo -e "  ${GREEN}Flips to 'offline' 10 min after stop-heartbeat.sh.${NC}"
 header
 echo ""
