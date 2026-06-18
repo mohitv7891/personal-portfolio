@@ -53,10 +53,15 @@ const Live = () => {
   }, []);
 
   useEffect(() => {
-    fetch('/api/spotify')
-      .then((r) => r.json())
-      .then((data) => setSpotify(data))
-      .catch(() => {});
+    const fetchSpotify = () => {
+      fetch('/api/spotify')
+        .then((r) => r.json())
+        .then((data) => setSpotify(data))
+        .catch(() => {});
+    };
+    fetchSpotify();
+    const id = setInterval(fetchSpotify, 30_000);
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -161,12 +166,49 @@ const Live = () => {
             />
           )}
 
-          <ActivityRow
-            label="listening"
-            primary={spotify?.isPlaying ? spotify.title : 'Not playing'}
-            secondary={spotify?.isPlaying ? spotify.artist : 'Set up Spotify in Vercel env vars'}
-            href={spotify?.isPlaying ? spotify.url : undefined}
-          />
+          {/* Spotify — live widget */}
+          <div className="flex flex-col gap-1.5">
+            <span className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-slate-600">
+              listening
+              {spotify?.isPlaying && (
+                <span className="flex items-end gap-[3px] h-3">
+                  <span className="eq-bar" />
+                  <span className="eq-bar" />
+                  <span className="eq-bar" />
+                  <span className="eq-bar" />
+                </span>
+              )}
+            </span>
+
+            {spotify?.isPlaying ? (
+              <a
+                href={spotify.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 group mt-0.5"
+              >
+                {spotify.albumArt && (
+                  <div className="relative shrink-0">
+                    <img
+                      src={spotify.albumArt}
+                      alt="album art"
+                      className="w-10 h-10 rounded object-cover shadow-lg shadow-black/40"
+                    />
+                    {/* rotating vinyl ring overlay */}
+                    <span className="absolute inset-0 rounded border border-teal-400/30 animate-spin [animation-duration:8s]" />
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="text-teal-300 text-sm font-medium truncate group-hover:text-teal-200 transition-colors">
+                    {spotify.title}
+                  </p>
+                  <p className="text-slate-500 text-xs mt-0.5 truncate">{spotify.artist}</p>
+                </div>
+              </a>
+            ) : (
+              <p className="text-slate-600 text-sm mt-0.5">Not playing</p>
+            )}
+          </div>
         </div>
 
       </div>
