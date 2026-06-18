@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Design — Live Section</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #060D18;
+      --card:      #0C1628;
+      --border:    #1A2D45;
+      --teal:      #2DD4BF;
+      --teal-dim:  rgba(45,212,191,0.12);
+      --slate-100: #F1F5F9;
+      --slate-300: #CBD5E1;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-600: #475569;
+      --green:     #22C55E;
+      --amber:     #F59E0B;
+      --violet:    #8B5CF6;
+      --pink:      #EC4899;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--slate-300);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 48px 24px 80px;
+    }
+
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Layout ── */
+    .page { max-width: 960px; margin: 0 auto; }
+
+    /* ── Header ── */
+    .page-header { margin-bottom: 56px; }
+    .page-header .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--teal); border: 1px solid rgba(45,212,191,.25);
+      background: var(--teal-dim); padding: 3px 10px; border-radius: 99px;
+      margin-bottom: 16px;
+    }
+    .page-header h1 {
+      font-size: clamp(24px, 4vw, 40px);
+      color: var(--slate-100); font-weight: 700;
+      letter-spacing: -.02em; margin-bottom: 12px;
+    }
+    .page-header p { color: var(--slate-500); max-width: 560px; }
+
+    /* ── Section title ── */
+    .section-title {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px; margin-top: 56px;
+    }
+    .section-title span.num { color: var(--teal); font-family: monospace; font-size: 12px; }
+    .section-title h2 { color: var(--slate-100); font-size: 18px; font-weight: 700; white-space: nowrap; }
+    .section-title .line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+    .card + .card { margin-top: 16px; }
+
+    /* ── Grid ── */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+
+    /* ── Flow diagram ── */
+    .flow {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+      margin: 16px 0;
+    }
+    .flow-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: monospace; font-size: 12px;
+      color: var(--slate-300);
+      white-space: nowrap;
+    }
+    .flow-box.teal  { border-color: rgba(45,212,191,.4); color: var(--teal); background: var(--teal-dim); }
+    .flow-box.green { border-color: rgba(34,197,94,.3);  color: var(--green); background: rgba(34,197,94,.08); }
+    .flow-box.amber { border-color: rgba(245,158,11,.3); color: var(--amber); background: rgba(245,158,11,.08); }
+    .flow-box.violet{ border-color: rgba(139,92,246,.3); color: var(--violet); background: rgba(139,92,246,.08); }
+    .flow-box.pink  { border-color: rgba(236,72,153,.3); color: var(--pink); background: rgba(236,72,153,.08); }
+    .arrow { color: var(--slate-600); font-size: 16px; }
+
+    /* ── Feed cards ── */
+    .feed-card { border-radius: 14px; padding: 20px; border: 1px solid var(--border); background: var(--card); }
+    .feed-card .feed-label {
+      font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+      margin-bottom: 10px; font-weight: 600;
+    }
+    .feed-card h3 { font-size: 15px; color: var(--slate-100); margin-bottom: 6px; }
+    .feed-card p  { font-size: 12px; color: var(--slate-500); line-height: 1.7; }
+    .feed-card .tag {
+      display: inline-block; margin-top: 10px;
+      font-size: 10px; font-family: monospace;
+      padding: 2px 8px; border-radius: 4px;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--slate-500);
+    }
+
+    /* ── Timeline ── */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 8px; bottom: 0;
+      width: 1px; background: var(--border);
+    }
+    .tl-item { position: relative; margin-bottom: 24px; }
+    .tl-dot {
+      position: absolute; left: -28px; top: 4px;
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--teal); background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tl-dot.amber  { border-color: var(--amber); }
+    .tl-dot.violet { border-color: var(--violet); }
+    .tl-dot.pink   { border-color: var(--pink); }
+    .tl-dot.green  { border-color: var(--green); }
+    .tl-item .tl-title { color: var(--slate-100); font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .tl-item .tl-desc  { color: var(--slate-500); font-size: 12px; }
+    .tl-item .tl-code  {
+      margin-top: 8px; padding: 10px 14px;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; font-family: monospace; font-size: 11px;
+      color: var(--teal); overflow-x: auto;
+    }
+
+    /* ── Pill ── */
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; padding: 2px 10px; border-radius: 99px;
+      border: 1px solid; font-weight: 500;
+    }
+    .pill.teal   { color: var(--teal);   border-color: rgba(45,212,191,.3);   background: var(--teal-dim); }
+    .pill.green  { color: var(--green);  border-color: rgba(34,197,94,.3);    background: rgba(34,197,94,.08); }
+    .pill.amber  { color: var(--amber);  border-color: rgba(245,158,11,.3);   background: rgba(245,158,11,.08); }
+    .pill.violet { color: var(--violet); border-color: rgba(139,92,246,.3);   background: rgba(139,92,246,.08); }
+    .pill.pink   { color: var(--pink);   border-color: rgba(236,72,153,.3);   background: rgba(236,72,153,.08); }
+    .pill.slate  { color: var(--slate-400); border-color: var(--border); background: rgba(255,255,255,.03); }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; color: var(--slate-500); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 0 12px 10px; }
+    td { padding: 10px 12px; border-top: 1px solid var(--border); color: var(--slate-300); vertical-align: top; }
+    tr:hover td { background: rgba(255,255,255,.015); }
+    td:first-child { color: var(--teal); font-family: monospace; white-space: nowrap; }
+
+    /* ── Pulse dot ── */
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+    .dot-pulse { width: 8px; height: 8px; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+    .dot-green { background: var(--green); }
+    .dot-slate { background: var(--slate-600); }
+
+    /* ── Footer ── */
+    .page-footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--slate-600); font-size: 11px; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Page header ── -->
+  <header class="page-header">
+    <div class="badge">
+      <span class="dot-pulse dot-green"></span>
+      System Design Doc
+    </div>
+    <h1>Live Section — How It Works</h1>
+    <p>
+      The <code style="color:var(--teal)">#now</code> section of
+      <a href="http://localhost:5173/#now" target="_blank">mohit-portfolio</a>
+      aggregates five real-time data sources into a single typographic widget.
+      This document explains each feed, how data flows, and how the heartbeat
+      online-status system works.
+    </p>
+  </header>
+
+  <!-- ── 1. Overview ── -->
+  <div class="section-title">
+    <span class="num">01.</span>
+    <h2>Architecture Overview</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <p style="color:var(--slate-500);margin-bottom:20px;font-size:12px;">
+      <strong style="color:var(--slate-300)">Live.jsx</strong> mounts five independent
+      <code style="color:var(--teal)">useEffect</code> hooks on load — each fetching
+      a different API concurrently. All data is stored in local React state and rendered
+      into the two-column layout below the clock.
+    </p>
+
+    <!-- Data sources table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Feed</th>
+          <th>Source</th>
+          <th>Poll interval</th>
+          <th>How it updates</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Online status</td>
+          <td>GitHub Gist (heartbeat)</td>
+          <td>Every 2 min</td>
+          <td>Script on laptop pings Gist every 5 min</td>
+        </tr>
+        <tr>
+          <td>Listening</td>
+          <td>Spotify API → Vercel fn</td>
+          <td>Every 30 sec</td>
+          <td>OAuth refresh token → currently-playing endpoint</td>
+        </tr>
+        <tr>
+          <td>Last pushed</td>
+          <td>GitHub REST API</td>
+          <td>On load only</td>
+          <td>Public events feed, no auth required</td>
+        </tr>
+        <tr>
+          <td>Last solved</td>
+          <td>alfa-leetcode-api</td>
+          <td>On load only</td>
+          <td>Unofficial LeetCode proxy, public</td>
+        </tr>
+        <tr>
+          <td>Reading / Learning</td>
+          <td>GitHub Gist (CMS)</td>
+          <td>On load only</td>
+          <td>Edit Gist in browser → reflected live</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 2. Feeds ── -->
+  <div class="section-title">
+    <span class="num">02.</span>
+    <h2>Each Feed — Data Flow</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Heartbeat -->
+    <div class="feed-card">
+      <div class="feed-label" style="color:var(--green)">● Online Status</div>
+      <h3>Laptop Heartbeat via GitHub Gist</h3>
+      <p>A shell script running on the laptop patches a secret GitHub Gist (<code>status.json</code>) with the current UTC timestamp every 5 minutes. The portfolio fetches this Gist every 2 minutes. If <code>lastSeen</code> is &lt; 10 min ago → online; otherwise → offline.</p>
+      <div style="margin-top:14px;">
+        <div class="flow">
+          <div class="flow-box green">heartbeat.sh<br><span style="font-size:10px;opacity:.6">every 5 min</span></div>
+          <span class="arrow">→</span>
+          <div class="flow-box">PATCH /gists/:id</div>
+          <span class="arrow">→</span>
+          <div class="flow-box amber">status.json<br><span style="font-size:10px;opacity:.6">lastSeen: now</span></div>
+        </div>
+        <div class="flow">
+          <div class="flow-box teal">Live.jsx<br><span style="font-size:10px;opacity:.6">every 2 min</span></div>
+          <span class="arrow">→</span>
+          <div class="flow-box">GET gist raw</div>
+          <span class="arrow">→</span>
+          <div class="flow-box green">age &lt; 10 min?<br><span style="font-size:10px;opacity:.6">online / offline</span></div>
+        </div>
+      </div>
+      <span class="tag">heartbeat.sh · stop-heartbeat.sh · setup-heartbeat.sh</span>
+    </div>
+
+    <!-- Spotify -->
+    <div class="feed-card">
+      <div class="feed-label" style="color:var(--pink)">♫ Listening</div>
+      <h3>Spotify Now Playing (OAuth 2.0)</h3>
+      <p>Spotify requires server-side auth. A Vercel serverless function (<code>api/spotify.js</code>) holds the refresh token in env vars, exchanges it for a short-lived access token, and proxies the <code>/currently-playing</code> endpoint. Polled every 30 s.</p>
+      <div style="margin-top:14px;">
+        <div class="flow">
+          <div class="flow-box teal">Live.jsx<br><span style="font-size:10px;opacity:.6">every 30 s</span></div>
+          <span class="arrow">→</span>
+          <div class="flow-box pink">GET /api/spotify</div>
+          <span class="arrow">→</span>
+          <div class="flow-box">Vercel fn</div>
+        </div>
+        <div class="flow">
+          <div class="flow-box">refresh_token</div>
+          <span class="arrow">→</span>
+          <div class="flow-box">access_token</div>
+          <span class="arrow">→</span>
+          <div class="flow-box pink">Spotify API</div>
+          <span class="arrow">→</span>
+          <div class="flow-box teal">title, artist,<br>albumArt, url</div>
+        </div>
+      </div>
+      <span class="tag">api/spotify.js · SPOTIFY_* env vars · Vercel</span>
+    </div>
+
+    <!-- GitHub -->
+    <div class="feed-card">
+      <div class="feed-label" style="color:var(--teal)">⎇ Last Pushed</div>
+      <h3>GitHub Public Events API</h3>
+      <p>Fetches <code>/users/mohitv7891/events?per_page=30</code> on page load. Finds the first <code>PushEvent</code> and extracts the repo name and timestamp. No authentication needed — public API.</p>
+      <div style="margin-top:14px;">
+        <div class="flow">
+          <div class="flow-box teal">Live.jsx<br><span style="font-size:10px;opacity:.6">on mount</span></div>
+          <span class="arrow">→</span>
+          <div class="flow-box">api.github.com<br>/users/:u/events</div>
+          <span class="arrow">→</span>
+          <div class="flow-box teal">first PushEvent<br>repo + time</div>
+        </div>
+      </div>
+      <span class="tag">github.com/mohitv7891 · public · no token</span>
+    </div>
+
+    <!-- LeetCode -->
+    <div class="feed-card">
+      <div class="feed-label" style="color:var(--amber)">⚡ Last Solved</div>
+      <h3>LeetCode via Unofficial Proxy</h3>
+      <p>Uses <a href="https://alfa-leetcode-api.onrender.com" target="_blank">alfa-leetcode-api</a>, a public proxy that scrapes LeetCode's GraphQL. Fetches the latest accepted submission for user <code>mohitv7891_</code> on page load.</p>
+      <div style="margin-top:14px;">
+        <div class="flow">
+          <div class="flow-box teal">Live.jsx<br><span style="font-size:10px;opacity:.6">on mount</span></div>
+          <span class="arrow">→</span>
+          <div class="flow-box amber">/mohitv7891_<br>/submission?limit=1</div>
+          <span class="arrow">→</span>
+          <div class="flow-box teal">title, slug,<br>timestamp</div>
+        </div>
+      </div>
+      <span class="tag">alfa-leetcode-api.onrender.com · public proxy</span>
+    </div>
+
+    <!-- Gist CMS -->
+    <div class="feed-card" style="grid-column: 1 / -1;">
+      <div class="feed-label" style="color:var(--violet)">📖 Reading &amp; Learning</div>
+      <h3>GitHub Gist as a Zero-Code CMS</h3>
+      <p>
+        A public GitHub Gist stores a JSON file that acts as a lightweight CMS.
+        Edit it directly in the browser — no git, no deploy needed.
+        The portfolio appends <code>?t=Date.now()</code> to bust cache and always fetches the latest version on page load.
+      </p>
+      <div style="margin-top:14px;">
+        <div class="flow">
+          <div class="flow-box violet">You edit Gist<br><span style="font-size:10px;opacity:.6">gist.github.com</span></div>
+          <span class="arrow">→</span>
+          <div class="flow-box">raw JSON<br>instantly live</div>
+          <span class="arrow">→</span>
+          <div class="flow-box teal">Live.jsx<br><span style="font-size:10px;opacity:.6">fetches on load</span></div>
+          <span class="arrow">→</span>
+          <div class="flow-box violet">reading.title<br>learning.topic</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-family:monospace;font-size:11px;color:var(--slate-400);">
+        <span style="color:var(--slate-600)">// gist content — edit at:</span><br>
+        <span style="color:var(--violet)">// https://gist.github.com/mohitv7891/042550b5b0ee7534e699ae76773db385</span><br><br>
+        {<br>
+        &nbsp;&nbsp;<span style="color:var(--teal)">"reading"</span>: { <span style="color:var(--amber)">"title"</span>: "...", <span style="color:var(--amber)">"author"</span>: "...", <span style="color:var(--amber)">"url"</span>: "..." },<br>
+        &nbsp;&nbsp;<span style="color:var(--teal)">"learning"</span>: { <span style="color:var(--amber)">"topic"</span>: "...", <span style="color:var(--amber)">"resource"</span>: "..." }<br>
+        }
+      </div>
+      <span class="tag">gist ID: 042550b5b0ee7534e699ae76773db385</span>
+    </div>
+
+  </div>
+
+  <!-- ── 3. Heartbeat system deep dive ── -->
+  <div class="section-title">
+    <span class="num">03.</span>
+    <h2>Heartbeat System — Step by Step</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
+      <span class="pill green">setup-heartbeat.sh</span>
+      <span class="pill teal">heartbeat.sh</span>
+      <span class="pill slate">stop-heartbeat.sh</span>
+      <span class="pill violet">GitHub Gist</span>
+      <span class="pill amber">Live.jsx</span>
+    </div>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-title">Run <code>bash setup-heartbeat.sh</code></div>
+        <div class="tl-desc">Prompts for a GitHub PAT (gist scope). Verifies it against <code>api.github.com/user</code>.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-title">Creates a secret GitHub Gist</div>
+        <div class="tl-desc">POSTs to <code>api.github.com/gists</code> with <code>status.json</code> containing the current timestamp. Extracts the Gist ID from the JSON response using Python.</div>
+        <div class="tl-code">{"lastSeen": "2026-06-18T01:53:00Z"}</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot amber"></div>
+        <div class="tl-title">Patches <code>heartbeat.sh</code> &amp; <code>Live.jsx</code></div>
+        <div class="tl-desc">Uses <code>sed</code> to inject the PAT and Gist ID into <code>heartbeat.sh</code>, and the full raw Gist URL into <code>HEARTBEAT_GIST_URL</code> in <code>Live.jsx</code>.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot violet"></div>
+        <div class="tl-title">Commits &amp; pushes <code>Live.jsx</code></div>
+        <div class="tl-desc">Pushes to <code>ui-redesign</code> branch. Vercel detects the push and redeploys automatically — the portfolio now knows the Gist URL.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-title">Starts <code>heartbeat.sh</code> in background</div>
+        <div class="tl-desc">Saves PID to <code>/tmp/portfolio-heartbeat.pid</code>. Pings the Gist every 5 minutes with a fresh timestamp.</div>
+        <div class="tl-code">PATCH /gists/:id → {"lastSeen": "&lt;now&gt;"}</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot teal" style="border-color:var(--teal)"></div>
+        <div class="tl-title"><code>Live.jsx</code> polls every 2 min</div>
+        <div class="tl-desc">Fetches the raw Gist. Computes <code>(now - lastSeen) / 60000</code>. If &lt; 10 minutes → <code>isOnline = true</code>, green pulse. If stale → <code>isOnline = false</code>, grey dot.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color:var(--slate-600)"></div>
+        <div class="tl-title">Run <code>bash stop-heartbeat.sh</code></div>
+        <div class="tl-desc">Kills the background process, wipes PAT from <code>heartbeat.sh</code>, reverts <code>Live.jsx</code> to empty Gist URL, commits &amp; pushes. Portfolio shows offline within 2 min.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 4. UI rendering ── -->
+  <div class="section-title">
+    <span class="num">04.</span>
+    <h2>UI Rendering Logic</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <p class="feed-label" style="color:var(--teal);margin-bottom:12px;">Clock &amp; Status Indicator</p>
+      <p style="font-size:12px;color:var(--slate-500);margin-bottom:12px;">
+        A <code>setInterval(1000)</code> ticks <code>time</code> state every second.
+        Clock is rendered with <code>toLocaleTimeString</code> in <code>Asia/Kolkata</code> timezone. The green/grey dot and text are driven by <code>isOnline</code> state.
+      </p>
+      <div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-family:monospace;font-size:11px;color:var(--slate-400);">
+        <span style="color:var(--slate-600)">// every 1 second</span><br>
+        setInterval(() =&gt; setTime(<span style="color:var(--teal)">new Date()</span>), 1000)<br><br>
+        <span style="color:var(--slate-600)">// every 2 minutes</span><br>
+        age = (now - lastSeen) / 60_000<br>
+        setIsOnline(age &lt; <span style="color:var(--amber)">10</span>)
+      </div>
+    </div>
+    <div class="card">
+      <p class="feed-label" style="color:var(--pink);margin-bottom:12px;">Spotify Widget</p>
+      <p style="font-size:12px;color:var(--slate-500);margin-bottom:12px;">
+        When <code>spotify.isPlaying</code> is true: shows album art with a slow-spinning teal border ring, song title (teal, truncated), artist name, and animated equalizer bars (4 CSS <code>@keyframes</code> bars with staggered delays). Clicking links to the Spotify track.
+      </p>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div style="width:36px;height:36px;background:var(--border);border-radius:6px;border:1px solid var(--teal);opacity:.6;flex-shrink:0;"></div>
+        <div>
+          <div style="font-size:12px;color:var(--teal);">Song Title</div>
+          <div style="font-size:11px;color:var(--slate-600);">Artist Name</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:2px;height:14px;margin-left:auto;">
+          <div style="width:2px;background:var(--teal);height:40%;border-radius:1px;"></div>
+          <div style="width:2px;background:var(--teal);height:100%;border-radius:1px;"></div>
+          <div style="width:2px;background:var(--teal);height:60%;border-radius:1px;"></div>
+          <div style="width:2px;background:var(--teal);height:80%;border-radius:1px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. Config & secrets ── -->
+  <div class="section-title">
+    <span class="num">05.</span>
+    <h2>Config &amp; Secrets</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Secret / Config</th><th>Where stored</th><th>Used by</th><th>How to update</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SPOTIFY_CLIENT_ID</td>
+          <td>Vercel env vars</td>
+          <td>api/spotify.js</td>
+          <td>Vercel dashboard → Settings → Env</td>
+        </tr>
+        <tr>
+          <td>SPOTIFY_CLIENT_SECRET</td>
+          <td>Vercel env vars</td>
+          <td>api/spotify.js</td>
+          <td>Vercel dashboard → Settings → Env</td>
+        </tr>
+        <tr>
+          <td>SPOTIFY_REFRESH_TOKEN</td>
+          <td>Vercel env vars</td>
+          <td>api/spotify.js</td>
+          <td>Run get-spotify-token.js → paste value</td>
+        </tr>
+        <tr>
+          <td>GITHUB_PAT (gist scope)</td>
+          <td>heartbeat.sh (runtime only)</td>
+          <td>heartbeat.sh</td>
+          <td>setup-heartbeat.sh prompts & injects it</td>
+        </tr>
+        <tr>
+          <td>HEARTBEAT_GIST_URL</td>
+          <td>Live.jsx source</td>
+          <td>Live.jsx (browser)</td>
+          <td>setup/stop scripts patch & push it</td>
+        </tr>
+        <tr>
+          <td>Reading / Learning content</td>
+          <td>GitHub Gist (public)</td>
+          <td>Live.jsx (browser)</td>
+          <td><a href="https://gist.github.com/mohitv7891/042550b5b0ee7534e699ae76773db385" target="_blank">Edit Gist directly</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="page-footer">
+    mohit-portfolio · ui-redesign branch ·
+    <a href="http://localhost:5173/#now" target="_blank">localhost:5173/#now</a> ·
+    Last updated Jun 2026
+  </div>
+
+</div>
+</body>
+</html>
