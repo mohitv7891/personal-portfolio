@@ -31,12 +31,18 @@ echo "▶ Heartbeat started (every ${INTERVAL}s). Press Ctrl+C to stop."
 
 while true; do
   TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-  PAYLOAD="{\"files\":{\"status.json\":{\"content\":\"{\\\"lastSeen\\\":\\\"${TIMESTAMP}\\\"}\"}}}"
+  PAYLOAD=$(python3 - <<EOF
+import json
+payload = {"files": {"status.json": {"content": json.dumps({"lastSeen": "$TIMESTAMP"})}}}
+print(json.dumps(payload))
+EOF
+)
 
   HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
     -X PATCH \
     -H "Authorization: token ${GITHUB_PAT}" \
     -H "Accept: application/vnd.github.v3+json" \
+    -H "Content-Type: application/json" \
     "https://api.github.com/gists/${GIST_ID}" \
     -d "${PAYLOAD}")
 

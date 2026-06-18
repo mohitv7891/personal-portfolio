@@ -46,11 +46,27 @@ ok "PAT verified"
 echo -e "\n${YELLOW}[2/5]${NC} Creating secret GitHub Gist..."
 
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-GIST_BODY=$(printf '{"description":"Portfolio heartbeat","public":false,"files":{"status.json":{"content":"{\"lastSeen\":\"%s\"}"}}}' "$TIMESTAMP")
+
+# Use Python to build valid JSON (avoids shell escaping pitfalls)
+GIST_BODY=$(python3 - <<EOF
+import json
+payload = {
+    "description": "Portfolio heartbeat",
+    "public": False,
+    "files": {
+        "status.json": {
+            "content": json.dumps({"lastSeen": "$TIMESTAMP"})
+        }
+    }
+}
+print(json.dumps(payload))
+EOF
+)
 
 GIST_RESP=$(curl -s -X POST \
   -H "Authorization: token $GITHUB_PAT" \
   -H "Accept: application/vnd.github.v3+json" \
+  -H "Content-Type: application/json" \
   https://api.github.com/gists \
   -d "$GIST_BODY")
 
