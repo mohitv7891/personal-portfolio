@@ -13,7 +13,7 @@ const projectData = [
   {
     title: 'BasketIQ — WhatsApp Grocery Bot',
     description:
-      'WhatsApp bot that concurrently scrapes Blinkit and Zepto to compare grocery prices and find the cheapest complete cart — send your list, get the best deal.',
+      'WhatsApp bot that concurrently scrapes Blinkit and Zepto to compare grocery prices and find the cheapest complete cart from your shopping list.',
     tech: ['Java', 'Spring Boot', 'Playwright', 'OpenAI', 'PostgreSQL', 'Twilio'],
     github: 'https://github.com/mohitv7891/BasketIQ-WhatsApp',
     live: null,
@@ -21,7 +21,7 @@ const projectData = [
   {
     title: 'Personal Finance Assistant',
     description:
-      'Web app to track expenses and spending patterns with AI-powered receipt scanning (OCR), visual analytics, and JWT-secured accounts.',
+      'Web app to track expenses with AI-powered receipt scanning (OCR), visual analytics charts, and JWT-secured accounts.',
     tech: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Prisma', 'JWT', 'Mindee OCR'],
     github: 'https://github.com/mohitv7891/Personal-Finance-Assistant',
     live: 'https://finance-app-frontend-52wb.onrender.com',
@@ -29,7 +29,7 @@ const projectData = [
   {
     title: 'SecureDocs',
     description:
-      'Secure document-sharing platform with a decoupled Key Distribution Center and Data Storage Server. Uses Identity-Based Encryption (IBE) and Digital Signatures via OpenSSL and WebAssembly.',
+      'Secure document-sharing platform with a decoupled Key Distribution Center. Uses Identity-Based Encryption (IBE) and Digital Signatures via OpenSSL and WebAssembly.',
     tech: ['Node.js', 'Express.js', 'React.js', 'MongoDB', 'AES', 'IBE', 'OpenSSL', 'WebAssembly', 'JWT'],
     github: 'https://github.com/mohitv7891/secureDocs',
     live: null,
@@ -37,7 +37,7 @@ const projectData = [
   {
     title: 'Secure Message Transmission (RSA & AES)',
     description:
-      'Command-line secure communication protocol using RSA for key exchange and digital signatures, and AES-256 for symmetric encryption of large datasets, implemented with Crypto++.',
+      'Command-line secure communication protocol using RSA for key exchange and digital signatures, and AES-256 for symmetric encryption, implemented with Crypto++.',
     tech: ['Bash', 'Unix/Linux', 'OpenSSL', 'RSA', 'AES-256', 'Digital Signatures', 'Crypto++'],
     github: 'https://github.com/mohitv7891/crypto--_assignment',
     live: null,
@@ -46,24 +46,38 @@ const projectData = [
 
 const Projects = () => {
   return (
-    <section className="py-10">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold mb-6">Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projectData.map((project, index) => (
-            <div key={index} className="bg-custom-light-dark p-6 rounded-lg shadow-lg flex flex-col">
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="text-xl font-semibold leading-snug">{project.title}</h3>
-                <div className="flex items-center gap-2 shrink-0 mt-1">
+    <section id="projects" className="py-20">
+      {/* Section heading */}
+      <div className="flex items-center gap-4 mb-10">
+        <span className="text-teal-400 text-sm font-mono shrink-0">05.</span>
+        <h2 className="text-xl font-bold text-slate-100 shrink-0">Projects</h2>
+        <div className="flex-1 h-px bg-custom-border" />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {projectData.map((project, i) => (
+          <div
+            key={i}
+            className="group relative bg-custom-light-dark border border-custom-border rounded-xl overflow-hidden flex flex-col hover:-translate-y-1 hover:border-teal-400/30 hover:shadow-lg hover:shadow-teal-900/20 transition-all duration-300"
+          >
+            {/* Top accent bar */}
+            <div className="h-[2px] w-full bg-gradient-to-r from-teal-500/60 via-teal-400/30 to-transparent" />
+
+            <div className="p-5 flex flex-col flex-1">
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <h3 className="text-slate-100 font-semibold text-sm leading-snug group-hover:text-teal-300 transition-colors">
+                  {project.title}
+                </h3>
+                <div className="flex items-center gap-2 shrink-0">
                   {project.github && (
                     <a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-400 hover:text-white transition-colors"
                       aria-label="GitHub"
+                      className="text-slate-500 hover:text-teal-400 transition-colors"
                     >
-                      <FaGithub size={18} />
+                      <FaGithub size={16} />
                     </a>
                   )}
                   {project.live && (
@@ -71,25 +85,27 @@ const Projects = () => {
                       href={project.live}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-400 hover:text-white transition-colors"
                       aria-label="Live Demo"
+                      className="text-slate-500 hover:text-teal-400 transition-colors"
                     >
-                      <FaExternalLinkAlt size={15} />
+                      <FaExternalLinkAlt size={13} />
                     </a>
                   )}
                 </div>
               </div>
-              <p className="text-slate-400 text-sm leading-relaxed flex-grow">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {project.tech.map((tech, i) => (
-                  <span key={i} className="bg-slate-200 text-slate-900 px-3 py-1 text-xs font-semibold rounded-md">
-                    {tech}
+
+              <p className="text-slate-400 text-xs leading-relaxed flex-1">{project.description}</p>
+
+              <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-custom-border">
+                {project.tech.map((t, j) => (
+                  <span key={j} className="text-teal-300 bg-teal-400/10 text-[11px] px-2 py-0.5 rounded">
+                    {t}
                   </span>
                 ))}
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );

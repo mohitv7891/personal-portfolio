@@ -2,14 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-custom-dark text-slate-300 antialiased;
   font-family: 'Roboto Mono', monospace;
+  background-image: radial-gradient(rgba(45, 212, 191, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 h1, h2, h3 {
   @apply text-slate-100 font-bold;
 }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #060D18; }
+::-webkit-scrollbar-thumb { background: #1A2D45; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2DD4BF; }
 
 /* Add these styles at the end of your index.css */
 
@@ -79,4 +91,23 @@ h1, h2, h3 {
   text-align: center;
   color: #94A3B8;
 }
+
+/* Spotify equalizer bars */
+@keyframes eq-bar {
+  0%, 100% { transform: scaleY(0.25); }
+  50%       { transform: scaleY(1); }
+}
+.eq-bar {
+  display: inline-block;
+  width: 2px;
+  height: 12px;
+  background: #2dd4bf;
+  border-radius: 1px;
+  transform-origin: bottom;
+  animation: eq-bar 0.7s ease-in-out infinite;
+}
+.eq-bar:nth-child(1) { animation-delay: 0s;    animation-duration: 0.8s; }
+.eq-bar:nth-child(2) { animation-delay: 0.15s; animation-duration: 0.6s; }
+.eq-bar:nth-child(3) { animation-delay: 0.3s;  animation-duration: 0.9s; }
+.eq-bar:nth-child(4) { animation-delay: 0.1s;  animation-duration: 0.7s; }
 
