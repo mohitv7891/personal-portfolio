@@ -131,9 +131,9 @@ const Live = () => {
         <span className="text-teal-400 text-sm font-mono shrink-0">~</span>
         <h2 className="text-xl font-bold text-slate-100 shrink-0">Now</h2>
         <div className="flex-1 h-px bg-custom-border" />
-        <span className="flex items-center gap-1.5 text-[10px] text-slate-600 uppercase tracking-widest">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-          live
+        <span className={`flex items-center gap-1.5 text-[10px] uppercase tracking-widest ${isOnline ? 'text-slate-600' : 'text-slate-700'}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-slate-600'}`} />
+          {isOnline ? 'live' : 'offline'}
         </span>
       </div>
 
