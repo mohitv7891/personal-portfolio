@@ -70,7 +70,7 @@ GIST_RESP=$(curl -s -X POST \
   https://api.github.com/gists \
   -d "$GIST_BODY")
 
-GIST_ID=$(echo "$GIST_RESP" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+GIST_ID=$(echo "$GIST_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id',''))" 2>/dev/null)
 [ -z "$GIST_ID" ] && fail "Gist creation failed. Response: $GIST_RESP"
 
 GIST_URL="https://gist.githubusercontent.com/mohitv7891/${GIST_ID}/raw/status.json"
