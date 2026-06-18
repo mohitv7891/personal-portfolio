@@ -16,7 +16,7 @@
 # ─────────────────────────────────────────────────────────────
 
 GITHUB_PAT="your_github_personal_access_token_here"
-GIST_ID="your_gist_id_here"
+GIST_ID="a6964334ecdffc19dc8adbf0b13cfaa0"
 
 # ─────────────────────────────────────────────────────────────
 # How it works:

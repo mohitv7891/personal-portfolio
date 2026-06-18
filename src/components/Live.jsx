@@ -98,13 +98,20 @@ const Live = () => {
   }, []);
 
   useEffect(() => {
-    fetch('https://alfa-leetcode-api.onrender.com/mohitv7891_/submission?limit=1')
-      .then((r) => r.json())
-      .then((data) => {
-        const latest = data?.submission?.[0];
-        if (latest) setLeetcode(latest);
-      })
-      .catch(() => {});
+    // Render free tier sleeps — retry up to 3 times with 10s gaps
+    const fetchLeetcode = (attempt = 1) => {
+      fetch('https://alfa-leetcode-api.onrender.com/mohitv7891_/submission?limit=1')
+        .then((r) => r.json())
+        .then((data) => {
+          const latest = data?.submission?.[0];
+          if (latest) setLeetcode(latest);
+          else if (attempt < 3) setTimeout(() => fetchLeetcode(attempt + 1), 10_000);
+        })
+        .catch(() => {
+          if (attempt < 3) setTimeout(() => fetchLeetcode(attempt + 1), 10_000);
+        });
+    };
+    fetchLeetcode();
   }, []);
 
 
